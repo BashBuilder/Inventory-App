@@ -112,6 +112,11 @@
   --sidebar-ring: oklch(0.488 0.243 264.376);
 }
 
+.snapshot-area * {
+  color: black !important;
+  background-color: white !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -6,16 +6,20 @@ import { getSales } from "@/lib/db";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import ReceiptModal from "@/components/dashboard/receipt-modal";
 
 const Record = () => {
   const [open, setOpen] = React.useState(false);
   const [sales, setSales] = React.useState<any[]>([]);
+  const [openReceipt, setOpenReceipt] = React.useState(false);
+  const [selectedSale, setSelectedSale] = React.useState<SalesType | null>(
+    null,
+  );
 
   useEffect(() => {
     getSales().then(setSales);
@@ -24,6 +28,11 @@ const Record = () => {
   return (
     <main className="p-4">
       <ManageSale open={open} setOpen={setOpen} />
+      <ReceiptModal
+        open={openReceipt}
+        setOpen={setOpenReceipt}
+        sales={selectedSale as SalesType}
+      />
       <section className="mb-10 flex justify-between gap-4">
         <h2 className="text-xl font-semibold">Sales</h2>
         <Button
@@ -52,8 +61,8 @@ const Record = () => {
                 key={product.id}
                 className="cursor-pointer *:p-3"
                 onClick={() => {
-                  // setSelectedProduct(product);
-                  setOpen(true);
+                  setSelectedSale(product);
+                  setOpenReceipt(true);
                 }}
               >
                 <TableCell>

@@ -1,10 +1,38 @@
-import type { NextConfig } from "next";
+// import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+// const withPWA = require("next-pwa")({
+//   dest: "public",
+//   register: true,
+//   skipWaiting: true,
+// });
+
+// const nextConfig: NextConfig = {
+//   eslint: {
+//     ignoreDuringBuilds: true, // ✅ disables ESLint during `next build`
+//   },
+//   /* config options here */
+// };
+
+// module.exports = withPWA({
+//   nextConfig,
+// });
+
+// export default nextConfig;
+
+// next.config.js or next.config.mjs
+
+const withPWA = require("next-pwa")({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+});
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   eslint: {
-    ignoreDuringBuilds: true, // ✅ disables ESLint during `next build`
+    ignoreDuringBuilds: true,
   },
-  /* config options here */
+  // other config options (i18n, images, etc.) go here
 };
 
-export default nextConfig;
+module.exports = withPWA(nextConfig);
