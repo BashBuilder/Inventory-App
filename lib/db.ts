@@ -1,14 +1,27 @@
-// lib/db.ts
 import { openDB } from "idb";
 
+// Constants
 const DB_NAME = "inventory-db";
-const STORE_NAME = "products";
+const DB_VERSION = 2;
 
+export const PRODUCTS_STORE = "products";
+export const SALES_STORE = "sales";
+
+// Initialize DB with both stores
 export const initDB = async () => {
-  return await openDB(DB_NAME, 1, {
+  return await openDB(DB_NAME, DB_VERSION, {
     upgrade(db) {
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, {
+      // Create "products" store
+      if (!db.objectStoreNames.contains(PRODUCTS_STORE)) {
+        db.createObjectStore(PRODUCTS_STORE, {
+          keyPath: "id",
+          autoIncrement: true,
+        });
+      }
+
+      // Create "sales" store
+      if (!db.objectStoreNames.contains(SALES_STORE)) {
+        db.createObjectStore(SALES_STORE, {
           keyPath: "id",
           autoIncrement: true,
         });
@@ -17,35 +30,80 @@ export const initDB = async () => {
   });
 };
 
+//
+// Products CRUD
+//
 export const addProduct = async (product: any) => {
   const db = await initDB();
-  await db.add(STORE_NAME, product);
+  return await db.add(PRODUCTS_STORE, product);
 };
 
 export const getProducts = async () => {
   const db = await initDB();
-  return await db.getAll(STORE_NAME);
+  return await db.getAll(PRODUCTS_STORE);
 };
 
 export const updateProduct = async (product: any) => {
-  if (!product.id) {
-    throw new Error("Product must have an `id` to be updated.");
-  }
-
+  if (!product.id) throw new Error("Product must have an `id` to be updated.");
   const db = await initDB();
-  await db.put(STORE_NAME, product);
+  return await db.put(PRODUCTS_STORE, product);
 };
 
 export const deleteProduct = async (id: number) => {
   const db = await initDB();
-  await db.delete(STORE_NAME, id);
+  return await db.delete(PRODUCTS_STORE, id);
 };
 
-// Fetch paginated products
 export const getPaginatedProducts = async (page = 1, limit = 10) => {
   const db = await initDB();
-  const tx = db.transaction(STORE_NAME, "readonly");
-  const store = tx.objectStore(STORE_NAME);
+  const tx = db.transaction(PRODUCTS_STORE, "readonly");
+  const store = tx.objectStore(PRODUCTS_STORE);
+
+  const allItems: any[] = [];
+  let cursor = await store.openCursor();
+  let index = 0;
+  const start = (page - 1) * limit;
+  const end = page * limit;
+
+  while (cursor && allItems.length < limit) {
+    if (index >= start && index < end) {
+      allItems.push(cursor.value);
+    }
+    index++;
+    cursor = await cursor.continue();
+  }
+
+  return allItems;
+};
+
+//
+// Sales CRUD
+//
+export const addSale = async (sale: any) => {
+  const db = await initDB();
+  return await db.add(SALES_STORE, sale);
+};
+
+export const getSales = async () => {
+  const db = await initDB();
+  return await db.getAll(SALES_STORE);
+};
+
+export const updateSale = async (sale: any) => {
+  if (!sale.id) throw new Error("Sale must have an `id` to be updated.");
+  const db = await initDB();
+  return await db.put(SALES_STORE, sale);
+};
+
+export const deleteSale = async (id: number) => {
+  const db = await initDB();
+  return await db.delete(SALES_STORE, id);
+};
+
+export const getPaginatedSales = async (page = 1, limit = 10) => {
+  const db = await initDB();
+  const tx = db.transaction(SALES_STORE, "readonly");
+  const store = tx.objectStore(SALES_STORE);
 
   const allItems: any[] = [];
   let cursor = await store.openCursor();

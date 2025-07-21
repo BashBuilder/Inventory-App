@@ -18,18 +18,18 @@ export const sidebarLinks = [
     icon: <ShoppingCart className="size-4" />,
   },
   {
-    label: "Records",
-    href: "/record",
+    label: "Sales",
+    href: "/sales",
     icon: <Archive className="size-4" />,
   },
-  {
-    label: "Receipt",
-    href: "/receipt",
-    icon: <ReceiptText className="size-4" />,
-  },
-  {
-    label: "Products",
-    href: "/product",
-    icon: <ShoppingBasket className="size-4" />,
-  },
+  // {
+  //   label: "Receipt",
+  //   href: "/receipt",
+  //   icon: <ReceiptText className="size-4" />,
+  // },
+  // {
+  //   label: "Products",
+  //   href: "/product",
+  //   icon: <ShoppingBasket className="size-4" />,
+  // },
 ];

@@ -1,9 +1,8 @@
 "use client";
-
-import ManageInventory from "@/components/dashboard/manage-inventory";
+import ManageSale from "@/components/dashboard/manage-sales";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
-import { getProducts } from "@/lib/db";
+import React, { useEffect } from "react";
+import { getSales } from "@/lib/db";
 import {
   Table,
   TableBody,
@@ -14,55 +13,46 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const Inventory = () => {
-  const [open, setOpen] = useState(false);
-  const [products, setProducts] = useState<ProductType[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(
-    null,
-  );
+const Record = () => {
+  const [open, setOpen] = React.useState(false);
+  const [sales, setSales] = React.useState<any[]>([]);
 
   useEffect(() => {
-    getProducts().then(setProducts);
+    getSales().then(setSales);
   }, [open]);
 
   return (
     <main className="p-4">
-      <ManageInventory
-        open={open}
-        setOpen={setOpen}
-        product={selectedProduct}
-        setProduct={setSelectedProduct}
-      />
+      <ManageSale open={open} setOpen={setOpen} />
       <section className="mb-10 flex justify-between gap-4">
-        <h2 className="text-xl font-semibold">Inventories</h2>
+        <h2 className="text-xl font-semibold">Sales</h2>
         <Button
           onClick={() => {
             setOpen(true);
-            setSelectedProduct(null);
           }}
         >
-          Add Product
+          Sell Product
         </Button>
       </section>
-      {products.length > 0 && (
+
+      {sales.length > 0 && (
         <Table className="overflow-hidden rounded-md">
-          <TableCaption>All product</TableCaption>
           <TableHeader>
             <TableRow className="bg-primary hover:bg-primary text-white *:px-3 *:text-white">
               <TableHead>Image</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
+              <TableHead>Date</TableHead>
               <TableHead>Price ($) </TableHead>
               <TableHead>Quantity</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white">
-            {products?.map((product) => (
+            {sales?.map((product) => (
               <TableRow
                 key={product.id}
                 className="cursor-pointer *:p-3"
                 onClick={() => {
-                  setSelectedProduct(product);
+                  // setSelectedProduct(product);
                   setOpen(true);
                 }}
               >
@@ -76,7 +66,15 @@ const Inventory = () => {
                   )}
                 </TableCell>
                 <TableCell>{product.name}</TableCell>
-                <TableCell>{product.description}</TableCell>
+                <TableCell>
+                  {new Date(product.date).toLocaleTimeString("en-US", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </TableCell>
                 <TableCell>
                   {product?.price?.toLocaleString("en-US", {
                     style: "currency",
@@ -93,4 +91,4 @@ const Inventory = () => {
   );
 };
 
-export default Inventory;
+export default Record;
