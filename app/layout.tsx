@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import ReduxProvider from "@/providers/ReduxProider";
 import { ServiceWorkerRegister } from "@/providers/PWAProvider";
+import InstallPrompt from "@/components/dashboard/prompt";
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
       >
         <ReduxProvider>
           <ServiceWorkerRegister />
+          <InstallPrompt />
           {/* The ServiceWorkerRegister component is assumed to be imported from providers/PWAProvider.tsx */}
           {/* Ensure that the service worker is registered for PWA functionality */}
           {children}
