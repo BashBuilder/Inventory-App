@@ -1,6 +1,6 @@
 "use client";
 
-import { sidebarLinks } from "@/app/(dashboard)/data/statics";
+import { sidebarLinks } from "@/data/statics";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -16,10 +16,10 @@ const Sidebar = () => {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className={`flex items-center space-x-2 rounded-md p-2 text-sm hover:bg-blue-50 ${
+                className={`flex items-center space-x-2 rounded-md p-2 text-sm ${
                   pathName === link.href
-                    ? "bg-blue-500 text-white"
-                    : "text-gray-700"
+                    ? "bg-blue-500 text-white hover:bg-blue-600"
+                    : "text-gray-700 hover:bg-blue-50"
                 }`}
               >
                 {link.icon}

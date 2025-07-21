@@ -14,7 +14,7 @@ export const sidebarLinks = [
   },
   {
     label: "Inventory",
-    href: "/Inventory",
+    href: "/inventory",
     icon: <ShoppingCart className="size-4" />,
   },
   {
