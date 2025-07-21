@@ -26,3 +26,40 @@ export const getProducts = async () => {
   const db = await initDB();
   return await db.getAll(STORE_NAME);
 };
+
+export const updateProduct = async (product: any) => {
+  if (!product.id) {
+    throw new Error("Product must have an `id` to be updated.");
+  }
+
+  const db = await initDB();
+  await db.put(STORE_NAME, product);
+};
+
+export const deleteProduct = async (id: number) => {
+  const db = await initDB();
+  await db.delete(STORE_NAME, id);
+};
+
+// Fetch paginated products
+export const getPaginatedProducts = async (page = 1, limit = 10) => {
+  const db = await initDB();
+  const tx = db.transaction(STORE_NAME, "readonly");
+  const store = tx.objectStore(STORE_NAME);
+
+  const allItems: any[] = [];
+  let cursor = await store.openCursor();
+  let index = 0;
+  const start = (page - 1) * limit;
+  const end = page * limit;
+
+  while (cursor && allItems.length < limit) {
+    if (index >= start && index < end) {
+      allItems.push(cursor.value);
+    }
+    index++;
+    cursor = await cursor.continue();
+  }
+
+  return allItems;
+};

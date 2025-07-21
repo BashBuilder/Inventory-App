@@ -9,48 +9,63 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AlignVerticalDistributeEndIcon } from "lucide-react";
 
 const Inventory = () => {
   const [open, setOpen] = useState(false);
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(
+    null,
+  );
 
   useEffect(() => {
     getProducts().then(setProducts);
   }, [open]);
 
-  console.log("Products:", products);
-
   return (
-    <main className="space-y-6 p-4">
-      <ManageInventory open={open} setOpen={setOpen} />
-      <section className="mb-4 flex justify-between gap-4">
+    <main className="p-4">
+      <ManageInventory
+        open={open}
+        setOpen={setOpen}
+        product={selectedProduct}
+        setProduct={setSelectedProduct}
+      />
+      <section className="mb-10 flex justify-between gap-4">
         <h2 className="text-xl font-semibold">Inventories</h2>
-        <Button size="sm" onClick={() => setOpen(true)}>
+        <Button
+          onClick={() => {
+            setOpen(true);
+            setSelectedProduct(null);
+          }}
+        >
           Add Product
         </Button>
       </section>
-      {products.length && (
+      {products.length > 0 && (
         <Table className="overflow-hidden rounded-md">
-          <TableCaption>A list of your recent products.</TableCaption>
+          <TableCaption>All product</TableCaption>
           <TableHeader>
-            <TableRow className="bg-primary text-white *:px-3 *:text-white">
+            <TableRow className="bg-primary hover:bg-primary text-white *:px-3 *:text-white">
               <TableHead>Image</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Price ($) </TableHead>
               <TableHead>Quantity</TableHead>
-              {/* <TableHead>Action</TableHead> */}
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white">
             {products?.map((product) => (
-              <TableRow key={product.product} className="cursor-pointer *:p-3">
+              <TableRow
+                key={product.id}
+                className="cursor-pointer *:p-3"
+                onClick={() => {
+                  setSelectedProduct(product);
+                  setOpen(true);
+                }}
+              >
                 <TableCell>
                   {product.img && (
                     <img
@@ -72,12 +87,6 @@ const Inventory = () => {
               </TableRow>
             ))}
           </TableBody>
-          {/* <TableFooter>
-            <TableRow>
-              <TableCell colSpan={3}>Total</TableCell>
-              <TableCell className="text-right">$2,500.00</TableCell>
-            </TableRow>
-          </TableFooter> */}
         </Table>
       )}
     </main>
