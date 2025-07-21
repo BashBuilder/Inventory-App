@@ -7,11 +7,11 @@ import {
 } from "lucide-react";
 
 export const sidebarLinks = [
-  {
-    label: "Dashboard",
-    href: "/dashboard",
-    icon: <LayoutDashboard className="size-4" />,
-  },
+  // {
+  //   label: "Dashboard",
+  //   href: "/dashboard",
+  //   icon: <LayoutDashboard className="size-4" />,
+  // },
   {
     label: "Inventory",
     href: "/inventory",
