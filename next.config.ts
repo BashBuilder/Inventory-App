@@ -21,6 +21,8 @@
 
 // next.config.js or next.config.mjs
 
+// import {} from "next-pwa"
+
 const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
