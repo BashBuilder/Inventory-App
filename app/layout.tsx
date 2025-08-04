@@ -3,8 +3,8 @@ import { Mona_Sans, Nunito_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import ReduxProvider from "@/providers/ReduxProider";
-import { ServiceWorkerRegister } from "@/providers/PWAProvider";
 import InstallPrompt from "@/components/dashboard/prompt";
+import { ServiceWorkerRegister } from "./sw-register";
 
 const monaSans = Mona_Sans({
   variable: "--font-mona-sans",

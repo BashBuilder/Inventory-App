@@ -31,7 +31,7 @@ const InventorySchema = z.object({
     .refine((data) => data.type.startsWith("image/"), {
       message: "File must be an image",
     }),
-  description: z.string().min(1, "Description is required"),
+  imei: z.string().min(1, "Imei is required"),
 });
 
 type InventoryType = zodInfer<typeof InventorySchema>;
@@ -68,7 +68,7 @@ const ManageInventory = ({
         quantity: product.quantity,
         price: product.price,
         img: product.img, // Assuming img is a File object
-        description: product.description,
+        imei: product.imei,
       });
     } else {
       reset({
@@ -76,7 +76,7 @@ const ManageInventory = ({
         quantity: 0,
         price: 0,
         img: undefined, // Reset img to undefined
-        description: "",
+        imei: "",
       }); // Explicitly clear the form
     }
   }, [open, reset]);
@@ -102,7 +102,7 @@ const ManageInventory = ({
           quantity: data.quantity,
           price: data.price,
           img: data.img, // save File directly
-          description: data.description,
+          imei: data.imei,
         };
         await updateProduct(updatedProduct);
         toast.success("Product updated successfully");
@@ -115,7 +115,7 @@ const ManageInventory = ({
         quantity: data.quantity,
         price: data.price,
         img: data.img, // save File directly
-        description: data.description,
+        imei: data.imei,
       };
 
       await addProduct(payload);
@@ -182,12 +182,12 @@ const ManageInventory = ({
               </div>
             </div>
             <div>
-              <label>Description</label>
+              <label>IMEI</label>
               <div>
-                <Textarea {...register("description")} className="mt-2" />
-                {errors.name && (
+                <Input {...register("imei")} className="mt-2" />
+                {errors.imei && (
                   <span className="text-sm text-red-600">
-                    {errors.name.message}
+                    {errors.imei.message}
                   </span>
                 )}
               </div>

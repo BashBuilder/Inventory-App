@@ -2,10 +2,11 @@ import { openDB } from "idb";
 
 // Constants
 const DB_NAME = "inventory-db";
-const DB_VERSION = 2;
+const DB_VERSION = 9; // Increment this version when making changes to the schema
 
 export const PRODUCTS_STORE = "products";
 export const SALES_STORE = "sales";
+export const PROFILE_STORE = "profile";
 
 // Initialize DB with both stores
 export const initDB = async () => {
@@ -26,6 +27,12 @@ export const initDB = async () => {
           autoIncrement: true,
         });
       }
+
+      // Recreate "profile" store without keyPath
+      if (db.objectStoreNames.contains(PROFILE_STORE)) {
+        db.deleteObjectStore(PROFILE_STORE); // ✅ Important!
+      }
+      db.createObjectStore(PROFILE_STORE); // ✅ No keyPath
     },
   });
 };
@@ -74,6 +81,26 @@ export const getPaginatedProducts = async (page = 1, limit = 10) => {
   }
 
   return allItems;
+};
+
+// Profile CRUD
+export const getProfile = async () => {
+  const db = await initDB();
+  return await db.get(PROFILE_STORE, "profile");
+};
+
+export const updateProfile = async (profile: any) => {
+  const db = await initDB();
+  return await db.put(PROFILE_STORE, profile, "profile");
+};
+export const deleteProfile = async () => {
+  const db = await initDB();
+  return await db.delete(PROFILE_STORE, "profile");
+};
+
+export const addProfile = async (profile: any) => {
+  const db = await initDB();
+  return await db.put(PROFILE_STORE, profile, "profile");
 };
 
 //

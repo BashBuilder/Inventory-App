@@ -4,7 +4,7 @@ declare interface ProductType {
   quantity: number;
   price: number;
   img: File; // Store the image as a File object
-  description: string;
+  imei: string;
 }
 
 declare interface SalesType {

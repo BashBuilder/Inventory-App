@@ -51,7 +51,7 @@ const Inventory = () => {
             <TableRow className="bg-primary hover:bg-primary text-white *:px-3 *:text-white">
               <TableHead>Image</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
+              <TableHead>IMEI</TableHead>
               <TableHead>Price ($) </TableHead>
               <TableHead>Quantity</TableHead>
             </TableRow>
@@ -76,7 +76,7 @@ const Inventory = () => {
                   )}
                 </TableCell>
                 <TableCell>{product.name}</TableCell>
-                <TableCell>{product.description}</TableCell>
+                <TableCell>{product.imei}</TableCell>
                 <TableCell>
                   {product?.price?.toLocaleString("en-US", {
                     style: "currency",
