@@ -6,6 +6,7 @@ import Logo from "@/components/globals/logo";
 
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import ReceiptPDF from "./pdf-renderer";
+import UpdatedReceipt from "./receiptRapper";
 
 interface ManageInventoryProps {
   sales: SalesType;
@@ -29,7 +30,9 @@ const ReceiptModal: React.FC<ManageInventoryProps> = ({
           <Logo />
         </DialogTitle>
 
-        <div className="flex gap-6">
+        <UpdatedReceipt item={sales} />
+
+        {/* <div className="flex gap-6">
           <div className="w-full">
             <h2 className="mb-2 text-lg font-semibold">Receipt</h2>
             <div className="rounded border bg-gray-50 p-4">
@@ -68,7 +71,7 @@ const ReceiptModal: React.FC<ManageInventoryProps> = ({
               )}
             </div>
           </div>
-        </div>
+        </div> */}
       </DialogContent>
     </Dialog>
   );

@@ -27,8 +27,7 @@ const InventorySchema = z.object({
   sellerName: z.string().min(1, "Name is required"),
   sellerId: z.string().min(1, "Id is required"),
   sellerAddress: z.string().min(1, "Address is required"),
-  imei: z.string().min(1, "Imei is required"),
-  sellerPhoneNumber: z.string().min(1, "Phone number is required"),
+  sellerPhoneNumber: z.string().optional(),
   quantity: z.number().min(0, "Quantity must be at least 0"),
 });
 
@@ -61,10 +60,7 @@ const ManageSale = ({ open, setOpen }: ManageInventoryProps) => {
     mode: "onChange",
     defaultValues: {},
   });
-
-  const onSubmit: SubmitHandler<InventoryType> = async (
-    data: InventoryType,
-  ) => {
+  const onSubmit: SubmitHandler<InventoryType> = async (data) => {
     try {
       if (!selectedProduct) {
         setError("quantity", {
@@ -87,8 +83,7 @@ const ManageSale = ({ open, setOpen }: ManageInventoryProps) => {
       };
 
       await updateProduct(payload);
-
-      await addSale({
+      const salesToAdd: SalesType = {
         id: Date.now(),
         productId: selectedProduct.id,
         quantity: data.quantity,
@@ -96,7 +91,14 @@ const ManageSale = ({ open, setOpen }: ManageInventoryProps) => {
         date: new Date().toISOString(),
         name: selectedProduct.name,
         img: selectedProduct.img,
-      });
+        sellerName: data.sellerName,
+        sellerId: data.sellerId,
+        sellerPhoneNumber: data.sellerPhoneNumber,
+        imei: selectedProduct.imei,
+        sellerAddress: data.sellerAddress,
+      };
+
+      await addSale(salesToAdd);
       toast.success("Product added successfully");
       handleClose();
     } catch (error) {
@@ -106,17 +108,51 @@ const ManageSale = ({ open, setOpen }: ManageInventoryProps) => {
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className={`w-full space-y-4`}>
+      <DialogContent className={`space-y-4 sm:max-w-[800px]`}>
         <DialogTitle className="text-2xl">Sell Product</DialogTitle>
         <div className={`flex gap-6`}>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className={`w-full space-y-4`}
+            className={`grid w-full grid-cols-2 gap-4 space-y-4`}
           >
             <SelectSale
               products={products}
               setSelectedProduct={setSelectedProduct}
             />
+            <div>
+              <label>Seller Name</label>
+              <div>
+                <Input className="mt-2" {...register("sellerName")} />
+                {errors.sellerName && (
+                  <span className="text-sm text-red-600">
+                    {errors.sellerName.message}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div>
+              <label>Seller ID</label>
+              <div>
+                <Input className="mt-2" {...register("sellerId")} />
+                {errors.sellerId && (
+                  <span className="text-sm text-red-600">
+                    {errors.sellerId.message}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div>
+              <label>Seller Phone</label>
+              <div>
+                <Input className="mt-2" {...register("sellerPhoneNumber")} />
+                {errors.sellerPhoneNumber && (
+                  <span className="text-sm text-red-600">
+                    {errors.sellerPhoneNumber.message}
+                  </span>
+                )}
+              </div>
+            </div>
+
             <div>
               <label>Quantity</label>
               <div>
@@ -143,8 +179,19 @@ const ManageSale = ({ open, setOpen }: ManageInventoryProps) => {
                 ).toLocaleString("en-US", {})}
               />
             </div>
+            <div className="col-span-2">
+              <label>Seller Address</label>
+              <div>
+                <Input className="mt-2" {...register("sellerAddress")} />
+                {errors.sellerAddress && (
+                  <span className="text-sm text-red-600">
+                    {errors.sellerAddress.message}
+                  </span>
+                )}
+              </div>
+            </div>
 
-            <Button className="w-full" disabled={isSubmitting}>
+            <Button className="col-span-2 w-full" disabled={isSubmitting}>
               {isSubmitting ? <Loader2 /> : "Submit"}
             </Button>
           </form>

@@ -53,6 +53,7 @@ const Record = () => {
               <TableHead>Date</TableHead>
               <TableHead>Price ($) </TableHead>
               <TableHead>Quantity</TableHead>
+              <TableHead>IMEI</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white">
@@ -91,6 +92,7 @@ const Record = () => {
                   })}
                 </TableCell>
                 <TableCell>{product.quantity}</TableCell>
+                <TableCell>{product.imei}</TableCell>
               </TableRow>
             ))}
           </TableBody>

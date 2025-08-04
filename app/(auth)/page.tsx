@@ -52,7 +52,7 @@ const ProductForm = () => {
           image: imageData,
         });
         dispatch(updateProfile({ title, image: imageData }));
-        // Handle the form submission
+        router.push("/inventory");
       } else {
         alert("Please provide both title and image");
       }

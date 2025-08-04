@@ -14,5 +14,11 @@ declare interface SalesType {
   price: number;
   date: string;
   name: string;
+  sellerName: string;
+  sellerId: string;
+  sellerAddress: string;
+  quantity: number;
+  sellerPhoneNumber?: string | undefined;
+  imei: string;
   img: File;
 }
