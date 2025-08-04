@@ -17,7 +17,7 @@ const ProductForm = () => {
 
   useEffect(() => {
     getProfile().then((res) => {
-      if (res.title && res.image) {
+      if (res && res?.title && res?.image) {
         router.push("/inventory");
       } else {
         setPageLoading(false);

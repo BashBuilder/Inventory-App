@@ -24,8 +24,11 @@ interface ManageInventoryProps {
 }
 
 const InventorySchema = z.object({
-  // name: z.string().min(1, "Name is required"),
-  // id: z.number(),
+  sellerName: z.string().min(1, "Name is required"),
+  sellerId: z.string().min(1, "Id is required"),
+  sellerAddress: z.string().min(1, "Address is required"),
+  imei: z.string().min(1, "Imei is required"),
+  sellerPhoneNumber: z.string().min(1, "Phone number is required"),
   quantity: z.number().min(0, "Quantity must be at least 0"),
 });
 

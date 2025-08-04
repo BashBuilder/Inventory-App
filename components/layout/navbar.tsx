@@ -12,13 +12,11 @@ const Navbar = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [pageLoading, setPageLoading] = React.useState(true);
-  const { title, image } = useSelector(
-    (state: RootState) => state.auth.profile,
-  );
+  const profile = useSelector((state: RootState) => state.auth.profile);
 
   useEffect(() => {
     getProfile().then((res) => {
-      if (res.title && res.image) {
+      if (res && res?.title && res?.image) {
         dispatch(updateProfile({ title: res.title, image: res.image }));
         setPageLoading(false);
       } else {
@@ -34,10 +32,10 @@ const Navbar = () => {
           <Loader2 className="animate-spin" />
         </div>
       )}
-      {title && image && (
+      {profile?.title && profile?.image && (
         <div className="flex items-center gap-2">
-          <img src={image} alt={title} className="h-8 w-8" />
-          <p className="font-serif text-lg font-semibold">{title}</p>
+          <img src={profile.image} alt={profile.title} className="h-8 w-8" />
+          <p className="font-serif text-lg font-semibold">{profile.title}</p>
         </div>
       )}
       {/* <Logo /> */}
