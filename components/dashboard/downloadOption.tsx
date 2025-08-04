@@ -73,7 +73,6 @@ export const DownloadOptions = ({
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
 
-      // Calculate scaling to fit width with some margin
       const margin = 20;
       const availableWidth = pdfWidth - 2 * margin;
       const ratio = Math.min(
@@ -84,14 +83,23 @@ export const DownloadOptions = ({
       const finalWidth = imgWidth * 0.264583 * ratio;
       const finalHeight = imgHeight * 0.264583 * ratio;
 
-      // Center the receipt on the page
       const x = (pdfWidth - finalWidth) / 2;
       const y = margin;
 
       pdf.addImage(imgData, "PNG", x, y, finalWidth, finalHeight);
-      pdf.save(`${filename}.pdf`);
 
-      toast.success("PDF downloaded successfully!");
+      const blob = await pdf.output("blob");
+      const blobUrl = URL.createObjectURL(blob);
+
+      const printWindow = window.open(blobUrl);
+      if (printWindow) {
+        printWindow.onload = () => {
+          printWindow.focus();
+          printWindow.print();
+        };
+      }
+
+      toast.success("PDF ready for printing!");
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast.error("Failed to generate PDF");
