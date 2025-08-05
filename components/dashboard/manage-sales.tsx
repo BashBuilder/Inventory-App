@@ -83,7 +83,7 @@ const ManageSale = ({ open, setOpen }: ManageInventoryProps) => {
       };
 
       await updateProduct(payload);
-      const salesToAdd: SalesType = {
+      const salesToAdd = {
         id: Date.now(),
         productId: selectedProduct.id,
         quantity: data.quantity,

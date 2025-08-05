@@ -1,10 +1,15 @@
 declare interface ProductType {
   id: number;
   name: string;
-  quantity: number;
   price: number;
-  img: File; // Store the image as a File object
+  img: File;
   imei: string;
+  sellerName: string;
+  sellerId: string;
+  sellerAddress: string;
+  sellerPhoneNumber?: string | undefined;
+  dateBought: string;
+  quantity: number;
 }
 
 declare interface SalesType {
@@ -17,8 +22,9 @@ declare interface SalesType {
   sellerName: string;
   sellerId: string;
   sellerAddress: string;
-  quantity: number;
   sellerPhoneNumber?: string | undefined;
   imei: string;
   img: File;
+  dateSold: string;
+  quantity: number;
 }

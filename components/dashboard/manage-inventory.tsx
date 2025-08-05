@@ -21,7 +21,6 @@ interface ManageInventoryProps {
 
 const InventorySchema = z.object({
   name: z.string().min(1, "Name is required"),
-  quantity: z.number().min(0, "Quantity must be at least 0"),
   price: z.number().min(0, "Price must be at least 0"),
   img: z
     .file()
@@ -32,6 +31,10 @@ const InventorySchema = z.object({
       message: "File must be an image",
     }),
   imei: z.string().min(1, "Imei is required"),
+  sellerName: z.string().min(1, "Seller name is required"),
+  sellerId: z.string().min(1, "Seller ID is required"),
+  sellerAddress: z.string().min(1, "Seller address is required"),
+  sellerPhoneNumber: z.string().optional(),
 });
 
 type InventoryType = zodInfer<typeof InventorySchema>;
@@ -63,21 +66,9 @@ const ManageInventory = ({
 
   useEffect(() => {
     if (product) {
-      reset({
-        name: product.name,
-        quantity: product.quantity,
-        price: product.price,
-        img: product.img, // Assuming img is a File object
-        imei: product.imei,
-      });
+      reset(product);
     } else {
-      reset({
-        name: "",
-        quantity: 0,
-        price: 0,
-        img: undefined, // Reset img to undefined
-        imei: "",
-      }); // Explicitly clear the form
+      reset(); // Explicitly clear the form
     }
   }, [open, reset]);
 
@@ -99,23 +90,32 @@ const ManageInventory = ({
         const updatedProduct = {
           ...product,
           name: data.name,
-          quantity: data.quantity,
+          quantity: 1,
           price: data.price,
           img: data.img, // save File directly
           imei: data.imei,
+          sellerName: data.sellerName,
+          sellerId: data.sellerId,
+          sellerAddress: data.sellerAddress,
+          sellerPhoneNumber: data.sellerPhoneNumber,
         };
         await updateProduct(updatedProduct);
         toast.success("Product updated successfully");
         handleClose();
         return;
       }
-      const payload = {
+      const payload: ProductType = {
         id: Date.now(),
         name: data.name,
-        quantity: data.quantity,
+        quantity: 1,
         price: data.price,
-        img: data.img, // save File directly
+        img: data.img,
         imei: data.imei,
+        sellerName: data.sellerName,
+        sellerId: data.sellerId,
+        sellerAddress: data.sellerAddress,
+        sellerPhoneNumber: data.sellerPhoneNumber,
+        dateBought: new Date().toISOString(),
       };
 
       await addProduct(payload);
@@ -129,7 +129,7 @@ const ManageInventory = ({
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
-        className={`${watch("img") ? "sm:max-w-5xl" : ""} w-full space-y-4 transition duration-100 ease-linear`}
+        className={`${watch("img") ? "sm:max-w-8/12" : "sm:max-w-[800px]"} w-full space-y-4 transition duration-100 ease-linear`}
       >
         <DialogTitle className="text-2xl">
           {product ? "Update" : "Add"} Product
@@ -144,9 +144,9 @@ const ManageInventory = ({
           )}
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className={`${watch("img") ? "w-1/2" : "w-full"} space-y-4`}
+            className={`${watch("img") ? "w-1/2" : "w-full"} grid grid-cols-2 gap-4`}
           >
-            <div>
+            <div className="col-span-2">
               <label>Product Image</label>
               <div>
                 <Input
@@ -193,21 +193,6 @@ const ManageInventory = ({
               </div>
             </div>
             <div>
-              <label>Quantity</label>
-              <div>
-                <Input
-                  type="number"
-                  className="mt-2"
-                  {...register("quantity", { valueAsNumber: true })}
-                />
-                {errors.quantity && (
-                  <span className="text-sm text-red-600">
-                    {errors.quantity.message}
-                  </span>
-                )}
-              </div>
-            </div>
-            <div>
               <label>Price ($) </label>
               <div>
                 <Input
@@ -218,6 +203,51 @@ const ManageInventory = ({
                 {errors.price && (
                   <span className="text-sm text-red-600">
                     {errors.price.message}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label>Seller Name</label>
+              <div>
+                <Input className="mt-2" {...register("sellerName")} />
+                {errors.sellerName && (
+                  <span className="text-sm text-red-600">
+                    {errors.sellerName.message}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div>
+              <label>Seller ID</label>
+              <div>
+                <Input className="mt-2" {...register("sellerId")} />
+                {errors.sellerId && (
+                  <span className="text-sm text-red-600">
+                    {errors.sellerId.message}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div>
+              <label>Seller Phone</label>
+              <div>
+                <Input className="mt-2" {...register("sellerPhoneNumber")} />
+                {errors.sellerPhoneNumber && (
+                  <span className="text-sm text-red-600">
+                    {errors.sellerPhoneNumber.message}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="col-span-2">
+              <label>Seller Address</label>
+              <div>
+                <Input className="mt-2" {...register("sellerAddress")} />
+                {errors.sellerAddress && (
+                  <span className="text-sm text-red-600">
+                    {errors.sellerAddress.message}
                   </span>
                 )}
               </div>
