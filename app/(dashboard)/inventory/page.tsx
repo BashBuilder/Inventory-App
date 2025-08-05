@@ -53,7 +53,7 @@ const Inventory = () => {
               <TableHead>Name</TableHead>
               <TableHead>IMEI</TableHead>
               <TableHead>Price ($) </TableHead>
-              <TableHead>Quantity</TableHead>
+              <TableHead>Seller Name</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white">
@@ -75,15 +75,15 @@ const Inventory = () => {
                     />
                   )}
                 </TableCell>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>{product.imei}</TableCell>
+                <TableCell>{product?.name}</TableCell>
+                <TableCell>{product?.imei}</TableCell>
                 <TableCell>
                   {product?.price?.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",
                   })}
                 </TableCell>
-                <TableCell>{product.quantity}</TableCell>
+                <TableCell>{product?.sellerName}</TableCell>
               </TableRow>
             ))}
           </TableBody>
