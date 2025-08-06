@@ -27,4 +27,6 @@ declare interface SalesType {
   img: File;
   dateSold: string;
   quantity: number;
+  customerName: string;
+  customerPhone: string;
 }

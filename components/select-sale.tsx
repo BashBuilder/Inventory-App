@@ -35,9 +35,8 @@ export default function SelectSale({
 
   useEffect(() => {
     if (value) {
-      const selectedProduct = products.find(
-        (item) => item.id === Number(value),
-      );
+      const id = Number(value.split("__")[0]);
+      const selectedProduct = products.find((item) => item.id === id);
       setSelectedProduct(selectedProduct || null);
     } else {
       setSelectedProduct(null);
@@ -58,14 +57,12 @@ export default function SelectSale({
           >
             <span className={cn("truncate", !value && "text-muted-foreground")}>
               {value
-                ? products
-                    .map((item) => ({
-                      value: String(item.id),
-                      label: item.name,
-                    }))
-                    .find((framework) => framework.value === value)?.label
+                ? products.find(
+                    (item) => item.id === Number(value.split("__")[0]),
+                  )?.name
                 : "Select Product"}
             </span>
+
             <ChevronDownIcon
               size={16}
               className="text-muted-foreground/80 shrink-0"
@@ -78,23 +75,28 @@ export default function SelectSale({
           align="start"
         >
           <Command>
-            <CommandInput placeholder="Search Product..." />
+            <CommandInput placeholder="Search product imei or name..." />
             <CommandList>
               <CommandEmpty>No Products found</CommandEmpty>
               <CommandGroup>
                 {products
-                  ?.map((item) => ({ value: item.id, label: item.name }))
-                  .map((framework) => (
+                  ?.map((item) => ({
+                    value: `${item.id}__${item.name.toLowerCase()}__${item.imei}`, // composite value for search
+                    label: item.name,
+                    id: item.id,
+                  }))
+                  .map((product) => (
                     <CommandItem
-                      key={framework.value}
-                      value={String(framework.value)}
+                      key={product.id}
+                      value={product.value} // searched string includes name & imei
                       onSelect={(currentValue) => {
-                        setValue(currentValue === value ? "" : currentValue);
+                        const selectedId = Number(currentValue.split("__")[0]);
+                        setValue(String(selectedId));
                         setOpen(false);
                       }}
                     >
-                      {framework.label}
-                      {value === String(framework.value) && (
+                      {product.label}
+                      {value === String(product.id) && (
                         <CheckIcon size={16} className="ml-auto" />
                       )}
                     </CommandItem>
