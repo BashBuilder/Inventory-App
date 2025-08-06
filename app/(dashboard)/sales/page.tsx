@@ -81,6 +81,7 @@ const Record = () => {
                 onClick={() => {
                   setSelectedSale(product);
                   setOpenReceipt(true);
+                  // setOpen(true);
                 }}
               >
                 <TableCell>

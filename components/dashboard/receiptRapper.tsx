@@ -31,8 +31,8 @@ const UpdatedReceipt = ({ item }: PropsType) => {
             },
           ]}
           customerInfo={{
-            name: item.sellerName,
-            phone: item.sellerPhoneNumber || "",
+            name: item.customerName,
+            phone: item.customerPhone || "",
           }}
           paymentMethod="CASH"
           imeiNumber={item.imei}
