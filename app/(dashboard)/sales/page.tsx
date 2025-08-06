@@ -2,7 +2,7 @@
 import ManageSale from "@/components/dashboard/manage-sales";
 import { Button } from "@/components/ui/button";
 import React, { useEffect } from "react";
-import { getSales } from "@/lib/db";
+import { getSales, getPaginatedSales, searchSales } from "@/lib/db";
 import {
   Table,
   TableBody,
@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ReceiptModal from "@/components/dashboard/receipt-modal";
+import { Input } from "@/components/ui/input";
 
 const Record = () => {
   const [open, setOpen] = React.useState(false);
@@ -20,10 +21,18 @@ const Record = () => {
   const [selectedSale, setSelectedSale] = React.useState<SalesType | null>(
     null,
   );
+  const [page, setPage] = React.useState(1);
+  const [search, setSearch] = React.useState("");
+  // const [limit, setLimit] = React.useState(1);
 
   useEffect(() => {
-    getSales().then(setSales);
-  }, [open]);
+    if (search) {
+      searchSales(search).then(setSales);
+      return;
+    }
+    // getSales().then(setSales);
+    getPaginatedSales(page, 10).then(setSales);
+  }, [open, page, search]);
 
   return (
     <main className="p-4">
@@ -43,6 +52,14 @@ const Record = () => {
           Sell Product
         </Button>
       </section>
+
+      <div className="mb-4">
+        <Input
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          placeholder="Search"
+        />
+      </div>
 
       {sales.length > 0 && (
         <Table className="overflow-hidden rounded-md">
@@ -97,6 +114,32 @@ const Record = () => {
             ))}
           </TableBody>
         </Table>
+      )}
+
+      {!search && (
+        <div>
+          <div className="flex items-center justify-center gap-4 py-4">
+            <Button
+              variant="outline"
+              onClick={() => {
+                if (page > 1) {
+                  setPage(page - 1);
+                }
+              }}
+            >
+              Previous
+            </Button>
+            <span>Page {page}</span>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setPage(page + 1);
+              }}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
       )}
     </main>
   );

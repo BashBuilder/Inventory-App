@@ -148,3 +148,63 @@ export const getPaginatedSales = async (page = 1, limit = 10) => {
 
   return allItems;
 };
+
+// search products
+export const searchProducts = async (query: string): Promise<ProductType[]> => {
+  const db = await initDB();
+  const tx = db.transaction(PRODUCTS_STORE, "readonly");
+  const store = tx.objectStore(PRODUCTS_STORE);
+
+  const results: ProductType[] = [];
+  const lowerQuery = query.toLowerCase();
+
+  let cursor = await store.openCursor();
+  while (cursor) {
+    const product = cursor.value as ProductType;
+
+    const matches = Object.entries(product).some(([key, value]) => {
+      if (value === undefined || value === null) return false;
+
+      // Skip 'img' since it's a File object
+      if (key === "img") return false;
+
+      return value.toString().toLowerCase().includes(lowerQuery);
+    });
+
+    if (matches) {
+      results.push(product);
+    }
+
+    cursor = await cursor.continue();
+  }
+  return results;
+};
+export const searchSales = async (query: string): Promise<SalesType[]> => {
+  const db = await initDB();
+  const tx = db.transaction(SALES_STORE, "readonly");
+  const store = tx.objectStore(SALES_STORE);
+
+  const results: SalesType[] = [];
+  const lowerQuery = query.toLowerCase();
+
+  let cursor = await store.openCursor();
+  while (cursor) {
+    const product = cursor.value as SalesType;
+
+    const matches = Object.entries(product).some(([key, value]) => {
+      if (value === undefined || value === null) return false;
+
+      // Skip 'img' since it's a File object
+      if (key === "img") return false;
+
+      return value.toString().toLowerCase().includes(lowerQuery);
+    });
+
+    if (matches) {
+      results.push(product);
+    }
+
+    cursor = await cursor.continue();
+  }
+  return results;
+};
