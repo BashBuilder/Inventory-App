@@ -70,6 +70,7 @@ const Inventory = () => {
               <TableHead>IMEI</TableHead>
               <TableHead>Price ($) </TableHead>
               <TableHead>Seller Name</TableHead>
+              <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="bg-white">
@@ -100,6 +101,13 @@ const Inventory = () => {
                   })}
                 </TableCell>
                 <TableCell>{product?.sellerName}</TableCell>
+                <TableCell>
+                  <span
+                    className={`h-fit w-fit rounded-md px-3 py-1 ${product?.quantity > 1 ? "bg-green-500 text-white" : "bg-red-500 text-white"} `}
+                  >
+                    {product?.quantity > 1 ? "In Stock" : "Sold Out"}
+                  </span>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
