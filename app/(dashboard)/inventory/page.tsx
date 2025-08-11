@@ -23,7 +23,6 @@ const Inventory = () => {
   );
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  // const [limit, setLimit] = useState(1);
 
   useEffect(() => {
     if (search) {
