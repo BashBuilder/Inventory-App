@@ -2,7 +2,7 @@
 import ManageSale from "@/components/dashboard/manage-sales";
 import { Button } from "@/components/ui/button";
 import React, { useEffect } from "react";
-import { getSales, getPaginatedSales, searchSales } from "@/lib/db";
+import { getPaginatedSales, searchSales } from "@/lib/db";
 import {
   Table,
   TableBody,
@@ -23,14 +23,12 @@ const Record = () => {
   );
   const [page, setPage] = React.useState(1);
   const [search, setSearch] = React.useState("");
-  // const [limit, setLimit] = React.useState(1);
 
   useEffect(() => {
     if (search) {
       searchSales(search).then(setSales);
       return;
     }
-    // getSales().then(setSales);
     getPaginatedSales(page, 10).then(setSales);
   }, [open, page, search]);
 
